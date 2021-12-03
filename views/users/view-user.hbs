@@ -1,0 +1,41 @@
+
+<link rel="stylesheet" href="../style/table.css" />
+<div style="margin-top: 80px;">
+    <div style="display: flex; padding:12px;">    &nbsp;&nbsp;&nbsp;&nbsp;   
+   <a href="/Users/Register" class="btn btn-primary btn-sm">ADD</a>   &nbsp;&nbsp;&nbsp;&nbsp;   
+    <h3> <b>VIEW LIST OF INFOR USER</b></h3>
+    </div>
+<table class="styled-table">
+<thead>
+<tr>
+    <th>FISRT NAME</th>
+    <th>LAST NAME</th>
+    <th>ADDRESS</th>
+    <th>EMAIL</th>
+    <th>PASSWORD</th>
+    <th>SALARY</th>
+    <th>IMAGE</th>
+    <th>PHONE</th>    
+    <th>ACTION</th>
+</tr>
+</thead>
+<tbody>
+{{#each users}}
+<tr >
+    <td >{{this.firstName}}</td>
+    <td>{{this.lastName}}</td>
+    <td class="pass">{{this.address}}</td>
+    <td class="pass">{{this.email}}</td>
+    <td class="pass">{{this.password}}</td>
+    <td>{{this.salary}}</td>
+    <td class="pass">{{this.image}}</td>
+    <td>{{this.phone}}</td>
+    <td style="display:flex; align-content:center; justify-content:space-around;"><a href="/Users/edit/{{this._id}}" class="btn btn-primary btn-sm">EDIT</a>
+     &nbsp;&nbsp;&nbsp;&nbsp; 
+    <a href="/Users/delete/{{this._id}}" onclick="return comfirm('Are you sure ?')" class="btn btn-primary btn-sm">DELETE</a>
+    </td>
+</tr>
+{{/each}}
+</tbody>
+</table>
+</div>

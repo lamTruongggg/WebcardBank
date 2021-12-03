@@ -1,0 +1,136 @@
+
+    <link rel="stylesheet" href="../assets/css/aos.css">
+  <div style="margin-top: 70px;" class="page-wrapper bg-gra-03 p-t-45 p-b-50">
+        <div class="wrapper wrapper--w790">
+            <div class="card card-5">
+                <div class="card-heading">
+                    <h2 class="title">Event Registration Form</h2>
+                </div>
+            <center><b> <h3 style="margin-top:20px; color:green;">{{viewTitle}}</h3></b></center>
+                <div class="card-body">
+<form method="POST" action="/Users/add" autocomplete="off">
+<input type="hidden" name="id" value="{{user._id}}">
+                        <div class="form-row m-b-55">
+                            <div class="name">Name</div>
+                            <div class="value">
+                                <div class="row row-space">
+                                    <div class="col-2">
+                                        <div class="input-group-desc">
+                                            <input class="input--style-5" value="{{user.firstName}}" type="text" name="firstName" required>
+                                            <label class="label--desc">first name</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-2">
+                                        <div class="input-group-desc">
+                                            <input class="input--style-5" value="{{user.lastName}}" type="text" name="lastName" required>
+                                            <label class="label--desc">last name</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="name">Address</div>
+                            <div class="value">
+                                <div class="input-group">
+                                    <input class="input--style-5" value="{{user.address}}" type="text" name="address" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="name">Email</div>
+                            <div class="value">
+                                <div class="input-group">
+                                    <input class="input--style-5" value="{{user.email}}" type="email" name="email" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="name">Password</div>
+                            <div class="value">
+                                <div class="input-group">
+                                    <input class="input--style-5" value="{{user.password}}" type="password" name="password" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="name">Confirm Password</div>
+                            <div class="value">
+                                <div class="input-group">
+                                    <input class="input--style-5" value="{{user.password}}" type="password" name="cpassword" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="name">Salary</div>
+                            <div class="value">
+                                <div class="input-group">
+                                    <input class="input--style-5" min ="1000000" value="{{user.salary}}" type="number" name="salary" required>
+                                </div>
+                            </div>
+                        </div>
+                         <div class="form-row">
+                            <div class="name">Image URL</div>
+                            <div class="value">
+                                <div class="input-group">
+                                    <input class="input--style-5" value="{{user.image}}" type="text" name="image">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="name">Phone Number</div>
+                            <div class="value">
+                                <div class="input-group">
+                                   <input class="input--style-5" minlength="8" value="{{user.phone}}" maxlength= "12" type="number" name="phone" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="name">
+                                Card type</div>
+                            <div class="value">
+                                <div class="input-group">
+                                    <div class="rs-select2 js-select-simple select--no-search">
+                                        <select name="subject">
+                                            <option disabled="disabled" selected="selected">Choose Type Card</option>                                           
+                                            <option>Domestic payment card</option>
+                                            <option>International  payment card</option>
+                                        </select>
+                                        <div class="select-dropdown"></div>
+                                    </div>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;                              
+                                    <div class="rs-select2 js-select-simple select--no-search">
+                                        <select name="subject">
+                                            <option disabled="disabled" selected="selected">Choose option </option>
+                                            <option>Credit card</option>
+                                            <option>Debit card</option>                                           
+                                        </select>
+                                        <div class="select-dropdown"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row p-t-20">
+                            <label class="label label--block">Are you an existing customer?</label>
+                            <div class="p-t-15">
+                                <label class="radio-container m-r-55">Yes
+                                    <input type="radio" checked="checked" name="exist">
+                                    <span class="checkmark"></span>
+                                </label>
+                                <label class="radio-container">No
+                                    <input type="radio" name="exist">
+                                    <span class="checkmark"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div>
+                            <button class="btn btn--radius-2 btn--red" type="submit">Register</button>
+                            </div>                                               
+                    </form>
+                     <div style="margin-top: 20px;">
+                            <a class="btn btn--radius-2 btn--red"  href="/Users/list">List</a>
+                        </div>    
+</div>
+            </div>
+        </div>
+    </div>
