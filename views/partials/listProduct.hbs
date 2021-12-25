@@ -1,0 +1,99 @@
+
+        <link rel="stylesheet" href="../assets/css/aos.css">
+<link rel="stylesheet" href="../style/table.css" />
+<div style="margin-top: 120px; ">
+    <div style="display: flex;">    &nbsp;&nbsp;&nbsp;&nbsp;   
+   <a href="/" class="btnn" >BACK</a>   &nbsp;&nbsp;&nbsp;&nbsp;   
+    <h3> <b>MANAGEMENT PRODUCT</b></h3>  &nbsp;&nbsp;&nbsp;&nbsp;    &nbsp;&nbsp;&nbsp;&nbsp;    &nbsp;&nbsp;&nbsp;&nbsp;   
+    <h4 style="color: red;">{{error}} </h4>
+     <h4 style="color:lime ;">{{titles}} </h4>
+    </div>
+    <form method="post" action="/Products/add">
+    <div style="display: flex;">
+        <input type="hidden" name="id" value="{{products._id}}">
+                        <div style="margin-left:30px; width: 36.5%; ">
+                             <div class="form-row">
+                            <div class="name">The Name</div>
+                            <div class="value">
+                                <div class="input-group">
+                                    <input class="input--style-5" autocomplete="off"  type="text" id="name" name="name" required>
+                                </div>
+                            </div>
+                        </div>
+                         <div class="form-row">
+                            <div class="name">Price</div>
+                            <div class="value">
+                                <div class="input-group">
+                                    <input class="input--style-5" autocomplete="off"  type="number" min="45000" id="price" name="price" required>
+                                </div>
+                            </div>
+                        </div>       
+                         <div class="form-row">
+                            <div class="name">Description</div>
+                            <div class="value">
+                                <div class="input-group">
+                                    <input class="input--style-5" autocomplete="off"  type="text" min="45000" id="des" name="des" required>
+                                </div>                                                    
+                            </div>
+                            <br>
+                             <div style="width:30% ; margin-top:20px;margin-left:60px;" class="rs-select2 js-select-simple select--no-search">
+                                      <input style="width: 220px; height:50px; background-color:#4232c2; color:white; border-radius: 5px;" type="submit">
+                                      </div>
+                        </div> 
+                                                   
+                          <div class="form-row">
+                            <div class="name">
+                                Account type</div>
+                            <div class="value">
+                                <div class="input-group">
+                                    <div class="rs-select2 js-select-simple select--no-search">
+                                        <select name="currency">
+                                               <option disabled="disabled"  selected="selected">USD </option> 
+                                               {{#each currencys}}                                         
+                                            <option >{{this.type}}</option>
+                                            {{/each}}
+                                        </select>
+                                        <div class="select-dropdown"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>  
+                        </div>
+                        
+</form>
+<table style="margin-left: 40px; margin-right:12px; margin-bottom:40px;" class="styled-table">
+<thead>
+<tr>
+    <th>NAME</th>
+    <th>PRICE</th>
+    <th>DESCRIPTION</th>
+    <th>CURRENCY</th>
+    <th>ACTION</th>
+</tr>
+</thead>
+<tbody>
+{{#each products}}
+<tr >
+    <td >{{this.name}}</td>
+    <td class="pass">{{this.price}}</td>
+    <td class="pass"> {{this.des}}</td>
+    <td>{{this.currency}}</td>
+    <td ><a  class="btnn" href="/Movies/showingMovie/edit/{{this._id}}" >EDIT</a>
+     &nbsp;&nbsp;&nbsp;&nbsp; 
+    <a href="/Movies/showingMovie/delete/{{this._id}}" onclick="return ConfirmDelete()"  class="btnn">DELETE</a>
+    </td>
+</tr>
+{{/each}}
+</tbody>
+</table>
+</div>
+<script>
+    function ConfirmDelete()
+            {
+              var x = confirm("Are you sure you want to delete?");
+              if (x)
+                  return true;
+              else
+                return false;
+            }
+</script>

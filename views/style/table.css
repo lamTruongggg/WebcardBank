@@ -1,4 +1,18 @@
 
+.btnn{
+    border-radius: 5px;
+    font-size: 0.9em;
+    width:80px;
+    font-family: sans-serif;
+    box-shadow: 0 0 20px #00000026;
+    padding: 12px;
+    margin-left: 20px;
+    color:#ffffff;
+    background-color: #4232c2;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+}
 .styled-table {
     border-collapse: collapse;
     margin: 25px 0;

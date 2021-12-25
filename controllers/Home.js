@@ -1,6 +1,7 @@
 const express =  require('express');
 const userModel = require('../models/user');
 const path = require('path');
+const productModel = require('../models/product');
 const app = express();
 
 
@@ -11,7 +12,7 @@ const isAuth = (req,res, next)=>{
         res.redirect('/Users');
     }
 }
-app.get('/',isAuth,(req,res)=>{
+app.get('/',(req,res)=>{
      const email = req.session.email;   
      res.render('partials/main.hbs',{query:email});
 });
@@ -19,9 +20,13 @@ app.get('/about',(req,res)=>{
       const email = req.session.email;  
      res.render('partials/about.hbs',{query:email});
 });
-app.get('/pricing',(req,res)=>{
+app.get('/pricing',async(req,res)=>{
       const email = req.session.email;  
-     res.render('partials/pricing.hbs',{query:email});
+      const products = await productModel.find({});
+     res.render('partials/pricing.hbs',{
+         query:email,
+         products: products.map(products => products.toJSON())
+    });
 });
 app.get('/work',(req,res)=>{
       const email = req.session.email;  

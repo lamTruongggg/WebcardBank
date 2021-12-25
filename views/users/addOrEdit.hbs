@@ -4,7 +4,11 @@
         <div class="wrapper wrapper--w790">
             <div class="card card-5">
                 <div class="card-heading">
-                    <h2 class="title">Event Registration Form</h2>
+                    {{#if titles}}
+                     <h2  class="title">{{titles}}</h2>
+                     {{else}}
+                    <h2  class="title">Event Registration Form</h2>
+                    {{/if}}
                 </div>
             <center><b> <h3 style="margin-top:20px; color:green;">{{viewTitle}}</h3></b></center>
                 <div class="card-body">
@@ -69,14 +73,6 @@
                                 </div>
                             </div>
                         </div>
-                         <div class="form-row">
-                            <div class="name">Image URL</div>
-                            <div class="value">
-                                <div class="input-group">
-                                    <input class="input--style-5" value="{{user.image}}" type="text" name="image">
-                                </div>
-                            </div>
-                        </div>
                         <div class="form-row">
                             <div class="name">Phone Number</div>
                             <div class="value">
@@ -91,38 +87,62 @@
                             <div class="value">
                                 <div class="input-group">
                                     <div class="rs-select2 js-select-simple select--no-search">
-                                        <select name="subject">
-                                            <option disabled="disabled" selected="selected">Choose Type Card</option>                                           
-                                            <option>Domestic payment card</option>
-                                            <option>International  payment card</option>
+                                        <select name="country">
+                                            {{#if country}}
+                                            <option disabled="disabled"  selected="selected">{{country}} </option>                                           
+                                            {{else}}
+                                               <option disabled="disabled"  selected="selected">Choose Country </option> 
+                                               {{/if}}
+                                           {{#each countrys}}
+                                            <option>{{this.name}}</option>
+                                            {{/each}} 
                                         </select>
                                         <div class="select-dropdown"></div>
                                     </div>
                                     &nbsp;&nbsp;&nbsp;&nbsp;                              
                                     <div class="rs-select2 js-select-simple select--no-search">
-                                        <select name="subject">
-                                            <option disabled="disabled" selected="selected">Choose option </option>
-                                            <option>Credit card</option>
-                                            <option>Debit card</option>                                           
+                                        <select name="cardType"  >
+                                            {{#if type}}
+                                            <option disabled="disabled" selected="selected">{{type}} </option>
+                                            {{else}}
+                                            <option disabled="disabled" selected="selected">Choose Type Card </option>
+                                            {{/if}}
+
+                                            {{#each cards}}
+                                            <option>{{this.name}}</option>
+                                            {{/each}}                                      
                                         </select>
                                         <div class="select-dropdown"></div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="form-row p-t-20">
-                            <label class="label label--block">Are you an existing customer?</label>
-                            <div class="p-t-15">
-                                <label class="radio-container m-r-55">Yes
-                                    <input type="radio" checked="checked" name="exist">
-                                    <span class="checkmark"></span>
-                                </label>
-                                <label class="radio-container">No
-                                    <input type="radio" name="exist">
-                                    <span class="checkmark"></span>
-                                </label>
+                        </div>    
+                         <div class="form-row">
+                            <div class="name">
+                                Account type</div>
+                            <div class="value">
+                                <div class="input-group">
+                                    <div class="rs-select2 js-select-simple select--no-search">
+                                        <select name="typeAccount">
+                                               <option disabled="disabled"  selected="selected">Choose Type Account </option> 
+                                            <option>Personal</option>
+                                             <option>Business</option>
+                                        </select>
+                                        <div class="select-dropdown"></div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
+                        </div>                 
+                        {{#if static}}    
+                         <div class="form-row">
+                            <div class="name">Card Password</div>
+                            <div class="value">
+                                <div class="input-group">
+                                    <input class="input--style-5" type="password" name="cardpass" required>
+                                </div>
+                            </div>
+                        </div> 
+                        {{/if}}     
                         <div>
                             <button class="btn btn--radius-2 btn--red" type="submit">Register</button>
                             </div>                                               

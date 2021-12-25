@@ -19,12 +19,19 @@ const UserSchema =  new mongoose.Schema({
      salary:{
         type:Number
     },
-     image:{
-        type:String
-    },
     phone:{
         type:Number
+    },
+    status:{
+        type:Number
+    },
+    dateCreate:{
+        type:Date
+    },
+    dateUpdate:{
+        type:Date
     }
+    
 
 });
 const User =  mongoose.model('customers',UserSchema);

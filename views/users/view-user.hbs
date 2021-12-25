@@ -1,41 +1,136 @@
 
 <link rel="stylesheet" href="../style/table.css" />
 <div style="margin-top: 80px;">
-    <div style="display: flex; padding:12px;">    &nbsp;&nbsp;&nbsp;&nbsp;   
-   <a href="/Users/Register" class="btn btn-primary btn-sm">ADD</a>   &nbsp;&nbsp;&nbsp;&nbsp;   
-    <h3> <b>VIEW LIST OF INFOR USER</b></h3>
+    <div style="display: flex; padding:12px;">    &nbsp;&nbsp;&nbsp;&nbsp;     
+    <h3> <b id ="text">VIEW LIST OF INFOR USER UNACTIVE</b></h3>  &nbsp;&nbsp;&nbsp;&nbsp;   
+     <a  onclick="test()" style="background-color:#4cc9f0; border-color:white;" class="btn btn-primary btn-sm">UNACTIVE</a>    &nbsp;&nbsp;&nbsp;&nbsp; 
+      <a onclick="testt()" style="background-color:#4361ee; border-color:white;" class="btn btn-primary btn-sm">ACTIVING</a>    &nbsp;&nbsp;&nbsp;&nbsp; 
+       <a onclick="testtt()"   class="btn btn-primary btn-sm">ACTIVE</a>    &nbsp;&nbsp;&nbsp;&nbsp; 
     </div>
+    <div id = "unactive">
 <table class="styled-table">
 <thead>
 <tr>
-    <th>FISRT NAME</th>
-    <th>LAST NAME</th>
-    <th>ADDRESS</th>
-    <th>EMAIL</th>
-    <th>PASSWORD</th>
-    <th>SALARY</th>
-    <th>IMAGE</th>
-    <th>PHONE</th>    
+    <th>ID CUSTOMER</th>
+    <th>TYPE CARD</th>
+    <th>COUNTRY</th>
+    <th>CARD NUMBER</th>
+    <th>MONTH</th>
+    <th>YEAR</th>
+    <th>CVV</th>    
+     <th>TYPE ACCOUNT</th>    
     <th>ACTION</th>
 </tr>
 </thead>
 <tbody>
-{{#each users}}
+{{#each unactive}}
 <tr >
-    <td >{{this.firstName}}</td>
-    <td>{{this.lastName}}</td>
-    <td class="pass">{{this.address}}</td>
-    <td class="pass">{{this.email}}</td>
-    <td class="pass">{{this.password}}</td>
-    <td>{{this.salary}}</td>
-    <td class="pass">{{this.image}}</td>
-    <td>{{this.phone}}</td>
-    <td style="display:flex; align-content:center; justify-content:space-around;"><a href="/Users/edit/{{this._id}}" class="btn btn-primary btn-sm">EDIT</a>
-     &nbsp;&nbsp;&nbsp;&nbsp; 
-    <a href="/Users/delete/{{this._id}}" onclick="return comfirm('Are you sure ?')" class="btn btn-primary btn-sm">DELETE</a>
+    <td >{{this.customerId}}</td>
+    <td>{{this.cardType}}</td>
+    <td class="pass">{{this.country}}</td>
+    <td>{{this.cardNumber}}</td>
+    <td class="pass">{{this.month}}</td>
+    <td>{{this.year}}</td>
+    <td>{{this.cvv}}</td>
+    <td>{{this.type}}</td>
+        <td style="display:flex; align-content:center; justify-content:space-around;">
+    <a href="/Users/delete/{{this.customerId}}" onclick="return comfirm('Are you sure ?')" class="btn btn-primary btn-sm">DELETE</a>
     </td>
 </tr>
 {{/each}}
 </tbody>
 </table>
+
 </div>
+ <div id = "activing" style="display:none;">
+<table class="styled-table">
+<thead>
+<tr>
+    <th>ID CUSTOMER</th>
+    <th>TYPE CARD</th>
+    <th>COUNTRY</th>
+      <th>CARD NUMBER</th>
+    <th>MONTH</th>
+    <th>YEAR</th>
+    <th>CVV</th>
+    <th>TYPE ACCOUNT</th>    
+    <th>ACTION</th>
+</tr>
+</thead>
+<tbody>
+{{#each activing}}
+<tr >
+    <td >{{this.customerId}}</td>
+    <td>{{this.cardType}}</td>
+    <td class="pass">{{this.country}}</td>
+      <td>{{this.cardNumber}}</td>
+    <td class="pass">{{this.month}}</td>
+    <td>{{this.year}}</td>
+    <td>{{this.cvv}}</td>
+        <td>{{this.type}}</td>
+        <td style="display:flex; align-content:center; justify-content:space-around;"><a href="/Users/edit/{{this.customerId}}?type={{this.cardType}}&country={{this.country}}" class="btn btn-primary btn-sm">EDIT</a>
+     &nbsp;&nbsp;&nbsp;&nbsp; 
+    <a href="/Users/delete/{{this.customerId}}" onclick="return comfirm('Are you sure ?')" class="btn btn-primary btn-sm">DELETE</a>
+    </td>
+</tr>
+{{/each}}
+</tbody>
+</table>
+
+</div>
+ <div id = "active" style="display:none;">
+<table class="styled-table" >
+<thead>
+<tr>
+     <th>ID CUSTOMER</th>
+    <th>TYPE CARD</th>
+    <th>COUNTRY</th>
+      <th>CARD NUMBER</th>
+    <th>MONTH</th>
+    <th>YEAR</th>
+    <th>CVV</th>    
+     <th>TYPE ACCOUNT</th>    
+    <th>ACTION</th>
+</tr>
+</thead>
+<tbody>
+{{#each active}}
+<tr >
+    <td >{{this.customerId}}</td>
+    <td>{{this.cardType}}</td>
+    <td class="pass">{{this.country}}</td>
+      <td>{{this.cardNumber}}</td>
+    <td class="pass">{{this.month}}</td>
+    <td>{{this.year}}</td>
+    <td>{{this.cvv}}</td>
+        <td>{{this.type}}</td>
+    <td style="display:flex; align-content:center; justify-content:space-around;"><a href="/Users/edit/{{this.customerId}}?type={{this.cardType}}&country={{this.country}}" class="btn btn-primary btn-sm">EDIT</a>
+     &nbsp;&nbsp;&nbsp;&nbsp; 
+    <a href="/Users/delete/{{this.customerId}}" onclick="return comfirm('Are you sure ?')" class="btn btn-primary btn-sm">DELETE</a>
+    </td>
+</tr>
+{{/each}}
+</tbody>
+</table>
+
+</div>
+<script>
+function test() {    
+  document.getElementById("unactive").style.display="" ;
+   document.getElementById("activing").style.display="none" ;
+    document.getElementById("active").style.display="none" ;
+     document.getElementById("text").innerText= "VIEW LIST OF INFOR USER UNACTIVE";
+};
+function testt() {    
+  document.getElementById("unactive").style.display="none" ;
+   document.getElementById("activing").style.display="" ;
+    document.getElementById("active").style.display="none" ;
+      document.getElementById("text").innerText= "VIEW LIST OF INFOR USER ACTIVING";
+};
+function testtt() {    
+  document.getElementById("unactive").style.display="none" ;
+   document.getElementById("activing").style.display="none" ;
+    document.getElementById("active").style.display="" ;
+      document.getElementById("text").innerText= "VIEW LIST OF INFOR USER ACTIVE";
+};
+</script>

@@ -10,7 +10,7 @@
 			<div class="user-detail">
 			<span class="error" id="eid" class="text-danger"></span>
 				<div class="input-box">					
-					<span class="details"> </span> <input value="{{user.email }}" min="3" max="50" onblur="validate2()" onkeyup="check()" 
+					<span class="details"> </span> <input value="{{email }}" min="3" max="50" onblur="validate2()" onkeyup="check()" 
 														 name="email" id="email" type="email" autocomplete="off" placeholder="Enter your email"/>
 						
 				</div>
@@ -19,7 +19,7 @@
             	</div>
 				<span class="error" id="pid" class="text-danger"></span>
 				<div class="input-box">
-					<span class="details"> </span> <input value="{{user.password }}" input min="3" max="50" onblur="validate3()"
+					<span class="details"> </span> <input  min="3" max="50" onblur="validate3()"
 					name ="password" id="password" type="password" autocomplete="off" placeholder="Enter your password"
 						pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z].{8,}"/>
 				</div>

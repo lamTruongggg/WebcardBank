@@ -7,6 +7,7 @@ const session = require('express-session');
 const bcrybt = require('bcryptjs');
 //const userRouter = require('./routes/userRoutes');
 const userController = require('./controllers/userController');
+const productController = require('./controllers/productController');
 const MongoDBSession =  require('connect-mongodb-session')(session);
 const home = require('./controllers/Home');
 const url = "mongodb+srv://card:card1234@cluster0.3fxcn.mongodb.net/webcard?retryWrites=true&w=majority";
@@ -36,6 +37,7 @@ mongoose.connect(url,{useUnifiedTopology:true,useNewUrlParser:true});
 app.use(express.static('views'));
 //app.use(userRouter);
 app.use('/Users',userController);
-app.use('/Home',home);
+app.use('/Products',productController);
+app.use('/',home);
 const PORT = process.env.PORT || 3000;
-app.listen(PORT),()=>{console.log('server is running');   };
+app.listen(PORT,()=>{console.log('server is running');})

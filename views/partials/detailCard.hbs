@@ -1,0 +1,119 @@
+   <link rel="stylesheet" href="../style/card.css">
+ 
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600|Abel">
+  <div class="body" style="margin-top: 4%;">
+  <div class="align">
+  <div class="grid align__item">
+
+    <h2>Enter your payment information below</h2>
+ <h3 style="color: green;"><b>{{titles}}</b></h3>
+  <h3 style="color: red;"><b>{{error}}</b></h3>
+
+    <div class="card" style="width: 80%;">
+
+      <header class="card__header" style="display: flex; justify-content:space-between; margin-top: 12px;">
+        <h3 class="card__title">Payment Details</h3>
+        <svg xmlns="http://www.w3.org/2000/svg" class="card__logo" width="140" height="43" viewBox="0 0 175.7 53.9"><style>.visa{fill:#fff;}</style><path class="visa" d="M61.9 53.1l8.9-52.2h14.2l-8.9 52.2zm65.8-50.9c-2.8-1.1-7.2-2.2-12.7-2.2-14.1 0-24 7.1-24 17.2-.1 7.5 7.1 11.7 12.5 14.2 5.5 2.6 7.4 4.2 7.4 6.5 0 3.5-4.4 5.1-8.5 5.1-5.7 0-8.7-.8-13.4-2.7l-2-.9-2 11.7c3.3 1.5 9.5 2.7 15.9 2.8 15 0 24.7-7 24.8-17.8.1-5.9-3.7-10.5-11.9-14.2-5-2.4-8-4-8-6.5 0-2.2 2.6-4.5 8.1-4.5 4.7-.1 8 .9 10.6 2l1.3.6 1.9-11.3M164.2 1h-11c-3.4 0-6 .9-7.5 4.3l-21.1 47.8h14.9s2.4-6.4 3-7.8h18.2c.4 1.8 1.7 7.8 1.7 7.8h13.2l-11.4-52.1m-17.5 33.6c1.2-3 5.7-14.6 5.7-14.6-.1.1 1.2-3 1.9-5l1 4.5s2.7 12.5 3.3 15.1h-11.9zm-96.7-33.7l-14 35.6-1.5-7.2c-2.5-8.3-10.6-17.4-19.6-21.9l12.7 45.7h15.1l22.4-52.2h-15.1"/><path fill="#F7A600" d="M23.1.9h-22.9l-.2 1.1c17.9 4.3 29.7 14.8 34.6 27.3l-5-24c-.9-3.3-3.4-4.3-6.5-4.4"/></svg>
+
+      </header>
+
+      <form id="myform"  action="/Users/addCard" method="post" class="form">
+
+        <div class="card__number form__field">
+          <label for="card__number" class="card__number__label">Card Number</label>
+          <input type="text" name="cardNumber" id="card__number" maxlength="16" class="card__number__input" placeholder="4000 1234 5678 9010">
+        </div>
+
+    <div style="display: flex; justify-content:space-between;margin-top:22px; margin-bottom: 12px;">
+        <div class="card__expiration form__field" >
+          <label for="card__expiration__year">Expiration</label>
+          <select name="month" id="card__expiration__year" style=" background-color: #171a1c;
+      color: #fff;
+      padding: .25rem 1rem;
+      cursor: pointer;">
+            <option >01</option>
+            <option >02</option>
+            <option >03</option>
+            <option >04</option>
+            <option >05</option>
+            <option >06</option>
+            <option >07</option>
+            <option >08</option>
+            <option >09</option>
+            <option >10</option>
+            <option >11</option>
+            <option >12</option>
+          </select>
+
+          <select name="year" id="year" style=" background-color: #171a1c;
+      color: #fff;
+      padding: .25rem 1rem;
+      cursor: pointer;">
+            <option >2024</option>
+            <option >2025</option>
+            <option >2026</option>
+            <option >2027</option>
+          </select>
+        </div>
+
+        <div class="card__ccv form__field" >
+          <label for="">CCV</label>
+          <input type="text" name="cvv" maxlength="3" class="card__ccv__input" placeholder="583">
+        </div>
+    </div>
+      </form>
+
+    </div>
+
+                        <div class="form-row" style="margin-top: 24px;">
+                            <div class="name">
+                                Card type</div>
+                            <div class="value">
+                                <div class="input-group">
+                                    <div class="rs-select2 js-select-simple select--no-search">
+                                        <select  form="myform" name="country" onchange="test(this)">
+                                            <option disabled="disabled" selected="selected">Choose Country </option>                                           
+                                           {{#each countrys}}
+                                            <option value="{{this.name}}">{{this.name}}</option>
+                                            {{/each}} 
+                                        </select>
+                                        <div class="select-dropdown"></div>
+                                    </div>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;                              
+                                    <div class="rs-select2 js-select-simple select--no-search">
+                                        <select   form="myform" name ="cardType" onchange="testt(this)">
+                                            <option disabled="disabled" selected="selected">Choose Type Card </option>
+                                            {{#each cards}}
+                                            <option value="{{this.name}}">{{this.name}}</option>
+                                            {{/each}}                                      
+                                        </select>
+                                        <div class="select-dropdown"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> 
+                          
+                         <div class="form-row">
+                            <div class="name">
+                                Account type</div>
+                            <div class="value">
+                                <div class="input-group">
+                                    <div class="rs-select2 js-select-simple select--no-search">
+                                        <select  form="myform" name="typeAccount">
+                                               <option disabled="disabled"  selected="selected">Choose Type Account </option> 
+                                            <option>Personal</option>
+                                             <option>Business</option>
+                                        </select>
+                                        <div class="select-dropdown"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>  
+    <input type="submit" form="myform" class="btnn"  style="margin-top: 12px; margin-left:60px; width:60%;">
+  </div>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+  </div>
+  </div>
