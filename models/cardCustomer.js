@@ -22,7 +22,7 @@ const UserSchema =  new mongoose.Schema({
     year:{
         type:Number
     },
-    cvv:{
+    ccv:{
         type:String
     },
     moneyBank:{

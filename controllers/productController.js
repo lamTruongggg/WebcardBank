@@ -4,6 +4,7 @@ const cartModel = require('../models/cart');
 const cardCustomerModel = require('../models/cardCustomer');
 const userModel = require('../models/user');
 const paypal = require('paypal-rest-sdk');
+const billModel = require('../models/bill');
 const nodemailer = require("nodemailer");
 const fs=require('fs');
 const app = express();
@@ -12,6 +13,14 @@ const isAuth = (req,res, next)=>{
         next();
     }else{
         res.redirect('/Users');
+    }
+}
+
+const isAdmin = (req,res, next)=>{
+    if(req.session.isAdmin){
+        next();
+    }else{
+        res.redirect('/');
     }
 }
 function makeid(length) {
@@ -39,7 +48,7 @@ app.get('/myCart',isAuth, async(req,res)=>{
    const carts = await cartModel.find({buyer:req.session.email,status:0});
       const numbers = await cartModel.find({buyer:req.session.email,status:0}).count();
       res.render('partials/cart.hbs',{
-          query:req.session.email,
+          query:req.session.email,admin:req.session.isAdmin,business:req.session.isBusiness,
             carts: carts.map(carts => carts.toJSON()),
             numbers:numbers
       })
@@ -49,7 +58,6 @@ app.get('/addCart/:id',isAuth, async(req,res)=>{
      productModel.findById(req.params.id,(err,info)=>{
         if(!err){
        cartModel.findOne({productId:req.params.id, status:0}).then(product=>{
-           console.log(product);
         if(product == null){       
     const cart = new cartModel();
     cart.name=info.name;
@@ -61,10 +69,15 @@ app.get('/addCart/:id',isAuth, async(req,res)=>{
     cart.quantity = 1;
     cart.status = 0;
     cart.productId = req.params.id;
-    console.log(cart);
     cart.save();
+    console.log(req.query.status);
+    if(req.query.status)
+    {
+     return res.redirect('/Products/myCart');
+    }
+    else{
                  req.session.status = "Add Successfull";
-        res.redirect('/pricing');
+        return res.redirect('/pricing');}
    }
    else
    {
@@ -108,39 +121,25 @@ function addRecord(req,res)
     try{
         products.save();
         req.session.status = "Add Successfull";
-        res.redirect('/Users/myProduct');
+        res.redirect('/Users/manageProduct');
         
     }catch(error)
     {
         res.status(500).send(error);
          req.session.error = "Add Fail";
-        res.redirect('/Users/myProduct');
+        res.redirect('/Users/manageProduct');
     }
 }
 var total =0;
 
 app.get('/',async(req,res)=>{
-    var fee = [
-  {
-    sale: {
-      id: '45A73278AX5749309',
-      state: 'completed',
-      amount: [Object],
-      payment_mode: 'INSTANT_TRANSFER',
-      protection_eligibility: 'ELIGIBLE',
-      protection_eligibility_type: 'ITEM_NOT_RECEIVED_ELIGIBLE,UNAUTHORIZED_PAYMENT_ELIGIBLE',
-      transaction_fee: [Object],
-      parent_payment: 'PAYID-MHEIZJY7FY21352RF7436519',
-      create_time: '2021-12-26T15:39:57Z',
-      update_time: '2021-12-26T15:39:57Z',
-      links: [Array]
-    }
-  }
-] ;
-console.log(fee[0].sale.transaction_fee);
+    
 });
 app.get('/cancel', function(req, res){
-  res.render('cancel.handlebars');
+   res.render('partials/note.hbs',{
+       text:"Payment Cancel. PLEASE CHECK YOUR CART AGAIN",
+       query:req.session.email,admin:req.session.isAdmin,business:req.session.isBusiness
+   });
 });
 app.post('/delete',async(req,res)=>{
   console.log(req.body);
@@ -228,8 +227,9 @@ app.get('/review_payment', (req, res) => {
         name:name,
          code:code,
         country:country,
-        seller:seller
-
+        seller:seller,
+            query:req.session.email,
+            admin:req.session.isAdmin,business:req.session.isBusiness
         });
     }
 
@@ -246,7 +246,6 @@ app.post('/checkBill', async(req, res) => {
     if(checkUser)
     {
         var checkMoney = checkUser.moneyBank - total;
-        console.log(checkMoney);
      if(checkMoney >=0)   
      {
            const rand = makeid(24);
@@ -270,13 +269,26 @@ app.post('/checkBill', async(req, res) => {
             {console.log("email not send");}
             else
             {   console.log("email sended");
-                res.redirect('/');
+              return res.render('partials/note.hbs',{
+       text:" Comfirm Payment. PLEASE CHECK YOUR GMAIL",
+        query:req.session.email,admin:req.session.isAdmin,business:req.session.isBusiness
+   });
             }
                 });
             }
-       
+            else
+            {
+       return res.render('partials/note.hbs',{
+       text:"Payment Not Enough Money. PLEASE CHECK YOUR CART AGAIN",
+        query:req.session.email,admin:req.session.isAdmin,business:req.session.isBusiness
+   });}
     }
-      res.redirect('/Users');
+    else
+    {
+     return res.render('partials/note.hbs',{
+       text:"Payment Cancel - YOUR Account is locked. PLEASE CHECK YOUR CART AGAIN",
+        query:req.session.email,admin:req.session.isAdmin,business:req.session.isBusiness
+   });}
 });
 app.get('/verifyAccount/:id',async(req,res)=>{
     try{
@@ -289,14 +301,79 @@ app.get('/verifyAccount/:id',async(req,res)=>{
              res.redirect('/Products/success?PayerID='+payerId+'&paymentId='+paymentId);
          }
          else{
-         res.redirect('/');}
+             return res.render('partials/note.hbs',{
+       text:"Payment Cancel. PLEASE CHECK YOUR CART AGAIN",
+        query:req.session.email,admin:req.session.isAdmin,business:req.session.isBusiness
+   });
+         }
     }
     catch(error)
     {
         res.status(500).send(error);
     }
 });
-app.get('/success', (req, res) => {
+
+app.get('/listBill', async(req, res) => {
+    const user = await userModel.findOne({email:req.session.email,admin:req.session.isAdmin,business:req.session.isBusiness});
+    if(user.isAdmin == 1)
+    {
+        const list = await billModel.find({});
+        return res.render('partials/listBill.hbs',{
+            bills: list.map(list => list.toJSON()),
+             query:req.session.email,admin:req.session.isAdmin,business:req.session.isBusiness
+        });
+    }
+    else
+    {
+        const checkUser = await cardCustomerModel.findOne({customerId:(user._id).toString()});
+        if(checkUser.type =="Personal")
+        {
+            const list = await billModel.find({buyer:req.session.email});
+            return res.render('partials/listBill.hbs',{
+            bills: list.map(list => list.toJSON()),
+             query:req.session.email,admin:req.session.isAdmin,business:req.session.isBusiness
+        });
+        }
+        else
+        {
+             const list = await billModel.find({seller:req.session.email});
+            return res.render('partials/listBill.hbs',{
+            bills: list.map(list => list.toJSON()),
+             query:req.session.email,admin:req.session.isAdmin,business:req.session.isBusiness
+        });
+    }
+}
+
+});
+app.get('/detail/:id',async(req,res)=>{
+    const bill = await billModel.findById(req.params.id);
+    res.render('partials/success.hbs',{
+         query:req.session.email,admin:req.session.isAdmin,business:req.session.isBusiness,
+         total : bill.total,
+                name_items : bill.name_items,
+             sku_items : bill.sku_items,
+             price_items : bill.price_items,
+             currency_items : bill.currency_items,
+             quantity_items : bill.quantity_items,
+              seller : bill.seller,
+             dateCreate : bill.dateCreate,
+             dateUpdate : bill.dateUpdate,
+             status : bill.status,              
+              email : bill.buyer,
+              fname : bill.fname,
+              lname : bill.lname,
+                recipient_name : bill.recipient_name,
+              line1 :bill.line1,
+              city : bill.city,
+              state : bill.state,
+              postal_code : bill.postal_code,
+              country_code : bill.country_code,
+             fee_payment : bill.fee_payment,
+             subTotal: bill.subTotal,
+             text: "Payment Infomation"
+        });
+});
+app.get('/success', async(req, res) => {
     console.log(req.body);
   const payerId = req.query.PayerID;
   const paymentId = req.query.paymentId;
@@ -314,7 +391,10 @@ app.get('/success', (req, res) => {
   };
   paypal.payment.execute(paymentId, execute_payment_json, function (error, payment) {
     if (error) {
-       res.render('cancle');
+     res.render('partials/note.hbs',{
+       text:"Payment Cancel. PLEASE CHECK YOUR CART AGAIN",
+       query:req.session.email,admin:req.session.isAdmin,business:req.session.isBusiness
+   });
     } else {
         
             const fee = payment.transactions[0].related_resources;
@@ -322,6 +402,80 @@ app.get('/success', (req, res) => {
             const payerInfo = payment.payer.payer_info;        
              const shipping_address = payerInfo.shipping_address;         
              var subTotal = total - fee[0].sale.transaction_fee.value;
+                const bill = new billModel();        
+                 bill.total = total.toString();
+                bill.name_items = items.name;
+             bill.sku_items = items.productId;
+             bill.price_items = items.price;
+             bill.currency_items = items.currency;
+             bill.quantity_items = items.quantity;
+              bill.seller = req.session.seller;
+             bill.dateCreate = payment.create_time;
+             bill.dateUpdate = payment.update_time;
+             bill.status = payment.payer.status;           
+              bill.buyer = payerInfo.email;
+              bill.fname = payerInfo.first_name;
+              bill.lname = payerInfo.last_name;
+                bill.recipient_name = shipping_address.recipient_name;
+              bill.line1 =shipping_address.line1;
+              bill.city = shipping_address.city;
+              bill.state = shipping_address.state;
+              bill.postal_code = shipping_address.postal_code;
+              bill.country_code = shipping_address.country_code;
+             bill.fee_payment = fee[0].sale.transaction_fee.value;
+             bill.subTotal = subTotal;
+             bill.save();
+                cartModel.updateMany({buyer:bill.buyer, status:0},{$set:{"status":1}},{new:true},(err,cart)=>{ //thanh toan don hang cua khachhang tu chua thanh toan sang trang thai da thanh toan
+               if(!cart){
+                            return res.render('partials/note.hbs',{
+                text:"Payment Cancel. PLEASE CHECK YOUR CART AGAIN",
+                 query:req.session.email,admin:req.session.isAdmin,business:req.session.isBusiness
+            });
+               }
+               else
+               {
+               userModel.findOne({email:bill.buyer}).then(buyer =>{    
+                    console.log(buyer);       //tra thong tin nguoi mua    
+                  if(!buyer) {
+                            return res.render('partials/note.hbs',{
+                text:"Payment Cancel. PLEASE CHECK YOUR CART AGAIN",
+                 query:req.session.email,admin:req.session.isAdmin,business:req.session.isBusiness
+            });}
+             userModel.findOne({email:bill.seller}).then(seller =>{          //tra thong tin nguoi basn     
+                 console.log(seller);
+                  if(!seller) {
+                            return res.render('partials/note.hbs',{
+                text:"Payment Cancel. PLEASE CHECK YOUR CART AGAIN",
+                 query:req.session.email
+            });}
+              cardCustomerModel.findOne({customerId:(buyer._id).toString(),status:2}).then(checkBuyer=>{              //tra thong tin moneybank nguoi mua    
+                if(!checkBuyer)  {
+                            return res.render('partials/note.hbs',{
+                text:"Payment Cancel. PLEASE CHECK YOUR CART AGAIN",
+                 query:req.session.email,admin:req.session.isAdmin,business:req.session.isBusiness
+            });}
+                        var checkMoneyBuyer = checkBuyer.moneyBank - total;
+                        console.log(checkMoneyBuyer);
+                        cardCustomerModel.findOne({customerId:(seller._id).toString(),status:2}).then(checkSeller=>{              //tra thong tin moneybank nguoi ban   
+                if(!checkSeller)  {
+                            return res.render('partials/note.hbs',{
+                text:"Payment Cancel. PLEASE CHECK YOUR CART AGAIN",
+                 query:req.session.email,admin:req.session.isAdmin,business:req.session.isBusiness
+            });}
+                        var checkMoneySeller = checkSeller.moneyBank + subTotal;
+                         console.log(checkMoneySeller);
+               cardCustomerModel.findOneAndUpdate({customerId:(buyer._id).toString()},{$set:{"moneyBank":checkMoneyBuyer}},{new:true},(err,cartBuyer)=>{          //cap nhat tien nguoi mua   
+               if(!cartBuyer){
+                            return res.render('partials/note.hbs',{
+                text:"Payment Cancel. PLEASE CHECK YOUR CART AGAIN",
+                 query:req.session.email,admin:req.session.isAdmin,business:req.session.isBusiness
+            });}       
+            cardCustomerModel.findOneAndUpdate({customerId:(seller._id).toString()},{$set:{"moneyBank":checkMoneySeller}},{new:true},(err,cartSeller)=>{            //cap nhat tien nguoi ban   
+               if(!cartSeller){
+                            return res.render('partials/note.hbs',{
+                text:"Payment Cancel. PLEASE CHECK YOUR CART AGAIN",
+                 query:req.session.email,admin:req.session.isAdmin,business:req.session.isBusiness
+            });}    
         res.render('partials/success.hbs',{
               total : total.toString(),
                 name_items : items.name,
@@ -343,10 +497,21 @@ app.get('/success', (req, res) => {
               postal_code : shipping_address.postal_code,
               country_code : shipping_address.country_code,
              fee_payment : fee[0].sale.transaction_fee.value,
-             subTotal: subTotal
+             subTotal: subTotal,
+             text: "Payment Done. Thank you for purchasing our products",
+              query:req.session.email,admin:req.session.isAdmin,business:req.session.isBusiness
         });
+    });
+          });
+        });
+    });
+          });
          });
     }
+});
+         });
+    }
+    
 });
 });
 app.use(express.static('views'));

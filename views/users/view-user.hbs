@@ -2,12 +2,32 @@
 <link rel="stylesheet" href="../style/table.css" />
 <div style="margin-top: 80px;">
     <div style="display: flex; padding:12px;">    &nbsp;&nbsp;&nbsp;&nbsp;     
+             <a onclick="tests()"   class="btn btn-primary btn-sm">ACTIVITY</a>    &nbsp;&nbsp;&nbsp;&nbsp; 
     <h3> <b id ="text">VIEW LIST OF INFOR USER UNACTIVE</b></h3>  &nbsp;&nbsp;&nbsp;&nbsp;   
      <a  onclick="test()" style="background-color:#4cc9f0; border-color:white;" class="btn btn-primary btn-sm">UNACTIVE</a>    &nbsp;&nbsp;&nbsp;&nbsp; 
       <a onclick="testt()" style="background-color:#4361ee; border-color:white;" class="btn btn-primary btn-sm">ACTIVING</a>    &nbsp;&nbsp;&nbsp;&nbsp; 
        <a onclick="testtt()"   class="btn btn-primary btn-sm">ACTIVE</a>    &nbsp;&nbsp;&nbsp;&nbsp; 
-         <a onclick="testttt()"   class="btn btn-primary btn-sm">LOCK</a>    &nbsp;&nbsp;&nbsp;&nbsp; 
+         <a onclick="testttt()" style="background-color:#0f30c2;"  class="btn btn-primary btn-sm">LOCK</a>    &nbsp;&nbsp;&nbsp;&nbsp; 
     </div>
+     <div id = "activity" style="display: none;">
+<table class="styled-table">
+<thead>
+<tr>
+    <th>NAME CUSTOMER</th>
+    <th>DATE LOGIN</th>
+</tr>
+</thead>
+<tbody>
+{{#each activity}}
+<tr >
+    <td >{{this.user}}</td>
+    <td>{{this.login}}</td>
+</tr>
+{{/each}}
+</tbody>
+</table>
+
+</div>
     <div id = "unactive">
 <table class="styled-table">
 <thead>
@@ -176,6 +196,7 @@ function test() {
    document.getElementById("activing").style.display="none" ;
     document.getElementById("active").style.display="none" ;
       document.getElementById("lock").style.display="none" ;
+      document.getElementById("activity").style.display="none" ;
      document.getElementById("text").innerText= "VIEW LIST OF INFOR USER UNACTIVE";
 };
 function testt() {    
@@ -183,6 +204,7 @@ function testt() {
    document.getElementById("activing").style.display="" ;
     document.getElementById("active").style.display="none" ;
             document.getElementById("lock").style.display="none" ;
+                  document.getElementById("activity").style.display="none" ;
       document.getElementById("text").innerText= "VIEW LIST OF INFOR USER ACTIVING";
 };
 function testtt() {    
@@ -190,6 +212,7 @@ function testtt() {
    document.getElementById("activing").style.display="none" ;
     document.getElementById("active").style.display="" ;
           document.getElementById("lock").style.display="none" ;
+                document.getElementById("activity").style.display="none" ;
       document.getElementById("text").innerText= "VIEW LIST OF INFOR USER ACTIVE";
 };
 function testttt() {    
@@ -197,7 +220,15 @@ function testttt() {
     document.getElementById("activing").style.display="none" ;
     document.getElementById("active").style.display="none" ;
     document.getElementById("lock").style.display="" ;
-
+      document.getElementById("activity").style.display="none" ;
       document.getElementById("text").innerText= "VIEW LIST OF INFOR USER LOCK";
+};
+function tests() {    
+  document.getElementById("unactive").style.display="none" ;
+    document.getElementById("activing").style.display="none" ;
+    document.getElementById("active").style.display="none" ;
+    document.getElementById("lock").style.display="none" ;
+      document.getElementById("activity").style.display="" ;
+      document.getElementById("text").innerText= "VIEW LIST OF ACTIVITY USER ";
 };
 </script>

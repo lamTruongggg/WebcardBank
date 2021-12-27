@@ -21,7 +21,7 @@ const UserSchema =  new mongoose.Schema({
         type:Number,
         required:true
     },
-    cvv:{
+    ccv:{
         type:String
     },
     type:{

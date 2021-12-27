@@ -20,8 +20,9 @@
                     <div class="col">
                         <div class="row text-muted"><b style="color: #242333;">{{this.name}}</b></div>
                     </div>
-                    <div class="col"> <a href="#">-</a><a href="#" class="border">{{this.quantity}}</a><a href="#">+</a> </div>
+                    <div class="col"> <a href="#">-</a><a href="#" class="border">{{this.quantity}}</a><a href="/Products/addCart/{{this.productId}}?status=0">+</a> </div>
                    <input  value="{{this.price}}" name="price" type="hidden"> 
+                    <input  value="{{this.quantity}}" name="quantity" type="hidden"> 
                     <div class="col"> {{this.price}} {{this.currency}} <span class="close"> <button onclick="return ConfirmDelete()"  style="width: 60px; height:50px;  background-color:#242333; color:white; margin-left:20px;margin-bottom:12px; border-radius: 5px;" >X</button></span></div>
                 </div>
             </div>
@@ -69,11 +70,13 @@
     window.addEventListener('load', 
 function findTotal(){
     var arr = document.getElementsByName('price');
+    var quantity = document.getElementsByName('quantity');
     var tot=0;
     for(var i=0;i<arr.length;i++){
         if(parseInt(arr[i].value))
             tot += parseInt(arr[i].value);
     }
+    tot = tot*quantity[0].value;
     document.getElementById('totalMoney').value = tot;
      document.getElementById('total').innerHTML = tot;
 }, false);

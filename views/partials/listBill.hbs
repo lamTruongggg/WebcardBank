@@ -1,0 +1,37 @@
+
+<link rel="stylesheet" href="../style/table.css" />
+<div style="margin-top: 80px;">
+    <div style="display: flex; padding:12px;">    &nbsp;&nbsp;&nbsp;&nbsp;     
+    <h3> <b id ="text">VIEW BILL OF INFOR USER </b></h3>  &nbsp;&nbsp;&nbsp;&nbsp;   
+    </div>
+<table class="styled-table">
+<thead>
+<tr>
+    <th>BUYER</th>
+    <th>SELLER</th>
+    <th>TOTAL</th>
+    <th> FEE PAYMENT</th>
+    <th>SUBTOTAL</th>
+    <th>COUNTRY</th>
+    <th>STATUS</th>
+    <th>ACTION</th>
+</tr>
+</thead>
+<tbody>
+{{#each bills}}
+<tr >
+    <td >{{this.buyer}}</td>
+    <td>{{this.seller}}</td>
+    <td class="pass">{{this.total}}</td>
+    <td>{{this.fee_payment}}</td>
+    <td class="pass">{{this.subTotal}}</td>
+    <td>{{this.country_code}}</td>
+    <td>{{this.status}}</td>
+        <td style="display:flex; align-content:center; justify-content:space-around;">
+    <a href="/Products/detail/{{this._id}}"onclick="return ConfirmDelete()" class="btn btn-primary btn-sm">SEE</a>
+    </td>
+</tr>
+{{/each}}
+</tbody>
+</table>
+</div>

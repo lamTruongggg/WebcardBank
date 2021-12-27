@@ -5,10 +5,9 @@
   <div class="align">
   <div class="grid align__item">
 
-    <h2>Enter your payment information below</h2>
+    <h2>Payment information</h2>
  <h3 style="color: green;"><b>{{titles}}</b></h3>
   <h3 style="color: red;"><b>{{error}}</b></h3>
-
     <div class="card" style="width: 80%;">
 
       <header class="card__header" style="display: flex; justify-content:space-between; margin-top: 12px;">
@@ -21,7 +20,7 @@
 
         <div class="card__number form__field">
           <label for="card__number" class="card__number__label">Card Number</label>
-          <input type="text" name="cardNumber" id="card__number" maxlength="16" class="card__number__input" placeholder="4000 1234 5678 9010">
+          <input type="text" name="cardNumber" value="{{card.cardNumber}}" id="card__number" maxlength="16" class="card__number__input" placeholder="4000 1234 5678 9010">
         </div>
 
     <div style="display: flex; justify-content:space-between;margin-top:22px; margin-bottom: 12px;">
@@ -31,6 +30,9 @@
       color: #fff;
       padding: .25rem 1rem;
       cursor: pointer;">
+      {{#if card}}
+      <option >{{card.month}}</option>
+      {{else}}
             <option >01</option>
             <option >02</option>
             <option >03</option>
@@ -43,27 +45,34 @@
             <option >10</option>
             <option >11</option>
             <option >12</option>
+            {{/if}}
           </select>
 
           <select name="year" id="year" style=" background-color: #171a1c;
       color: #fff;
       padding: .25rem 1rem;
       cursor: pointer;">
+       {{#if card}}
+      <option >{{card.year}}</option>
+      {{else}}
             <option >2024</option>
             <option >2025</option>
             <option >2026</option>
             <option >2027</option>
+            {{/if}}
           </select>
         </div>
 
         <div class="card__ccv form__field" >
           <label for="">CCV</label>
-          <input type="text" name="cvv" maxlength="3" class="card__ccv__input" placeholder="583">
+          <input type="text" name="ccv" value="{{card.ccv}}" maxlength="3" class="card__ccv__input" placeholder="583">
         </div>
     </div>
-      </form>
-
-    </div>
+      </form>  
+    </div> &nbsp;&nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;&nbsp;      &nbsp;&nbsp;&nbsp;&nbsp;     
+    {{#if card}}
+    <h1> Money in Bank: <b> {{card.moneyBank}}&dollar;</b></h1>
+    {{/if}}
 
                         <div class="form-row" style="margin-top: 24px;">
                             <div class="name">
@@ -72,7 +81,11 @@
                                 <div class="input-group">
                                     <div class="rs-select2 js-select-simple select--no-search">
                                         <select  form="myform" name="country" onchange="test(this)">
+                                          {{#if card}}
+                                                 <option disabled="disabled" selected="selected">{{card.country}}</option>
+                                                {{else}}
                                             <option disabled="disabled" selected="selected">Choose Country </option>                                           
+                                            {{/if}}
                                            {{#each countrys}}
                                             <option value="{{this.name}}">{{this.name}}</option>
                                             {{/each}} 
@@ -82,7 +95,11 @@
                                     &nbsp;&nbsp;&nbsp;&nbsp;                              
                                     <div class="rs-select2 js-select-simple select--no-search">
                                         <select   form="myform" name ="cardType" onchange="testt(this)">
+                                           {{#if card}}
+                                                 <option disabled="disabled" selected="selected">{{card.cardType}}</option>
+                                                {{else}}
                                             <option disabled="disabled" selected="selected">Choose Type Card </option>
+                                            {{/if}}
                                             {{#each cards}}
                                             <option value="{{this.name}}">{{this.name}}</option>
                                             {{/each}}                                      
@@ -100,16 +117,23 @@
                                 <div class="input-group">
                                     <div class="rs-select2 js-select-simple select--no-search">
                                         <select  form="myform" name="typeAccount">
-                                               <option disabled="disabled"  selected="selected">Choose Type Account </option> 
+                                           {{#if card}}
+                                                 <option disabled="disabled" selected="selected">{{card.type}}</option>
+                                                {{else}}
+                                               <option disabled="disabled"  selected="selected">Choose Type Account </option>                                              
                                             <option>Personal</option>
                                              <option>Business</option>
+                                               {{/if}}
                                         </select>
                                         <div class="select-dropdown"></div>
                                     </div>
                                 </div>
                             </div>
                         </div>  
-    <input type="submit" form="myform" class="btnn"  style="margin-top: 12px; margin-left:60px; width:60%;">
+                        {{#if card}}          
+                        {{else}}                                   
+    <input type="submit" form="myform" class="btnn"   style="margin-top: 12px; margin-left:60px; width:60%;">
+    {{/if}}
   </div>
 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>

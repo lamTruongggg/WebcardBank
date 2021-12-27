@@ -20,6 +20,20 @@ const isAuth = (req,res, next)=>{
         res.redirect('/Users');
     }
 }
+const isAdmin = (req,res, next)=>{
+    if(req.session.isAdmin){
+        next();
+    }else{
+        res.redirect('/');
+    }
+}
+const isBusiness = (req,res, next)=>{
+    if(req.session.isBusiness){
+        next();
+    }else{
+        res.redirect('/');
+    }
+}
 function makeid(length) {
     var result           = '';
     var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -38,11 +52,12 @@ app.get('/Register',async(req,res)=>{
     res.render('users/addOrEdit.hbs',{
         countrys: country.map(country => country.toJSON()),
         cards: card.map(card => card.toJSON()),
-        titles: titles
+        titles: titles,
+        query:req.session.email,admin:req.session.isAdmin,business:req.session.isBusiness
     }
     );
 });
-app.get('/myProduct',async(req,res)=>{
+app.get('/manageProduct',isAuth,isBusiness,async(req,res)=>{
     const titles = req.session.status;
     const error = req.session.error;
     delete req.session.error;
@@ -50,7 +65,7 @@ app.get('/myProduct',async(req,res)=>{
     const products = await productModel.find({author:req.session.email});
     const currencys = await currencyModel.find({});
     res.render('partials/listProduct.hbs',{
-        query: req.session.email,
+        query: req.session.email,admin:req.session.isAdmin,business:req.session.isBusiness,
         products: products.map(products => products.toJSON()),
         currencys: currencys.map(currencys => currencys.toJSON()),
         titles: titles,
@@ -68,18 +83,20 @@ app.post('/add', async(req,res)=>{
         updateRecord(req,res);
     }
 });
-app.get('/list',async(req,res)=>{
+app.get('/list',isAuth,isAdmin,async(req,res)=>{
     const email = req.session.email;   
     const unactive = await cardCustomerModel.find({status:0});
     const activing = await cardCustomerModel.find({status:1});
     const active = await cardCustomerModel.find({status:2});
      const lock = await cardCustomerModel.find({status:3});
-    console.log(active);
+     const list = await activitiesModel.find({});
     res.render('users/view-user.hbs',{
         unactive: unactive.map(unactive => unactive.toJSON()),
          activing: activing.map(activing => activing.toJSON()),
           active: active.map(active => active.toJSON()),
-              lock: lock.map(lock => lock.toJSON())
+              lock: lock.map(lock => lock.toJSON()),
+               activity: list.map(list => list.toJSON()),
+              query:req.session.email,admin:req.session.isAdmin,business:req.session.isBusiness
     });
 });
 function addRecord(req,res)
@@ -90,7 +107,8 @@ function addRecord(req,res)
         userModel.findOne({email:users.email}).then(user=>{
         if(user){
             res.render('users/addOrEdit.hbs',{
-        viewTitle:"Email Already"});
+        viewTitle:"Email Already",
+    query:req.session.email,admin:req.session.isAdmin,business:req.session.isBusiness});
         }
         else{        
             const hashedPws = bcrypt.hashSync(users.password,12);
@@ -99,7 +117,8 @@ function addRecord(req,res)
            cardNumberModel.findOneAndUpdate({country:body.country,cardType:body.cardType,status:0,type:body.typeAccount},{ $set: { "status": 1}},{new:true},(err,number)=>{
                if(!number){
                   res.render('users/addOrEdit.hbs',{
-        viewTitle:"Number Card is stock up !!!"});
+        viewTitle:"Number Card is stock up !!!",
+    query:req.session.email,admin:req.session.isAdmin,business:req.session.isBusiness});
                }
                else
                { users.save();
@@ -109,7 +128,7 @@ function addRecord(req,res)
                    cardC.country = number.country;
                    cardC.month = number.month;
                    cardC.year = number.year;
-                   cardC.cvv = number.cvv;
+                   cardC.ccv = number.ccv;
                    cardC.cardNumber = number.cardNumber;
                    cardC.status = 0;
                    cardC.moneyBank = body.salary;
@@ -168,7 +187,8 @@ app.get('/verifyAccount/:id',async(req,res)=>{
             {res.redirect('/Error');}
             else
             res.render('partials/login.hbs',{
-                email: user.email
+                email: user.email,
+                query:req.session.email,admin:req.session.isAdmin,business:req.session.isBusiness
             });
         });
     });
@@ -221,7 +241,7 @@ function updateRecord(req,res)
             }
         });
 }
-app.get('/edit/:id', (req,res)=>{
+app.get('/edit/:id',isAuth,isAdmin, (req,res)=>{
     userModel.findById(req.params.id,(err,user)=>{
         if(!err){
             res.render('users/addOrEdit.hbs',{
@@ -229,12 +249,13 @@ app.get('/edit/:id', (req,res)=>{
                 titles: "INFORMATION USER",
                 type:req.query.type,
                 country:req.query.country,
-                static: 1
+                static: 1,
+                query:req.session.email
             });
         }
     });
 });
-app.get('/delete/:id', async(req,res)=>{
+app.get('/delete/:id',isAuth,isAdmin,async(req,res)=>{
     try{
         const user = await userModel.findByIdAndDelete(req.params.id);
         if(!user) res.status(404).send("No item found");
@@ -251,7 +272,7 @@ app.get('/delete/:id', async(req,res)=>{
         res.status(500).send(error);
     }
 });
-app.get('/lock/:id', async(req,res)=>{
+app.get('/lock/:id',isAuth,isAdmin, async(req,res)=>{
     try{
         
          const changeLock = await cardCustomerModel.findOneAndUpdate({customerId:req.params.id},{$set:{"status":3}});
@@ -264,7 +285,7 @@ app.get('/lock/:id', async(req,res)=>{
         res.status(500).send(error);
     }
 });
-app.get('/unLock/:id', async(req,res)=>{
+app.get('/unLock/:id',isAuth,isAdmin,async(req,res)=>{
     try{
         
          const changeLock = await cardCustomerModel.findOneAndUpdate({customerId:req.params.id},{$set:{"status":2}});
@@ -277,10 +298,10 @@ app.get('/unLock/:id', async(req,res)=>{
         res.status(500).send(error);
     }
 });
-app.get('/', async(req,res)=>{      
+app.get('/', async(req,res)=>{   
      res.render('partials/login.hbs');
 });
-app.post('/login', async(req,res)=>{
+app.post('/login',(req,res)=>{
        const body = req.body;
     const users =  new userModel(body);
     const date = new Date();
@@ -289,21 +310,39 @@ app.post('/login', async(req,res)=>{
     const activities = new activitiesModel({user:body.email,login:date});
     userModel.findOne({email:users.email, status:2}).then(user=>{
         if(!user){            
-        return res.render('partials/login.hbs',{mess: "validate Email or Pasword"});
+        return res.render('partials/login.hbs',{mess: "validate Email or Pasword",query:req.session.email});
     }
     const pass = user.password;
     const validPassword =  bcrypt.compareSync(body.password,pass);
       if (!validPassword) {
-        return res.render('partials/login.hbs',{mess: "validate Email or Pasword"});
+        return res.render('partials/login.hbs',{mess: "validate Email or Pasword",query:req.session.email});
       }      
       req.session.isAuth =true;
-      req.session.isAdmin = true;
+      if(user.isAdmin==1)
+      {
+      req.session.isAdmin = true;      
+      }
+       if(user.isAdmin==0)
+      {
+     cardCustomerModel.findOne({customerId:(user._id).toString()}).then(checkUser=>{
+      if(checkUser.type=="Business")
+      {
+         req.session.isBusiness = true;
+      }
       req.session.email = user.email;
       activities.save();
-      res.redirect('/')
-      });  
+      return res.redirect('/');
+      });
+        }
+      else
+      {
+           req.session.email = user.email;
+      activities.save();
+      return res.redirect('/');
+      }
+      });
 });
-app.get('/myProfile', async(req,res)=>{
+app.get('/myProfile',isAuth, async(req,res)=>{
        const email = req.session.email;
     userModel.findOne({email:email}).then(user=>{
         if(!user){            
@@ -311,11 +350,11 @@ app.get('/myProfile', async(req,res)=>{
     }
         return res.render('partials/about.hbs',{
             users:user.toJSON(),
-            query:email
+            query:email,admin:req.session.isAdmin,business:req.session.isBusiness
         })
       });  
 });
-app.get('/mycard', async(req,res)=>{
+app.get('/cardManage',isAuth,isAdmin, async(req,res)=>{
        const email = req.session.email;    
        const titles = req.session.viewTitle;
        const error = req.session.error;
@@ -324,14 +363,24 @@ app.get('/mycard', async(req,res)=>{
        const country = await countryModel.find({});
     const card = await cardModel.find({});
         return res.render('partials/detailCard.hbs',{
-            query: email,
+            query: email,admin:req.session.isAdmin,business:req.session.isBusiness,
               countrys: country.map(country => country.toJSON()),
         cards: card.map(card => card.toJSON()),
         titles: titles,
         error: error
         });
 });
-app.get('/edit', (req,res)=>{
+app.get('/mycard',isAuth, async(req,res)=>{
+       const email = req.session.email;    
+       const user = await userModel.findOne({email:email});
+       const checkUser = await cardCustomerModel.findOne({customerId:(user._id).toString()});
+       console.log(checkUser);
+        return res.render('partials/detailCard.hbs',{
+            query: email,admin:req.session.isAdmin,business:req.session.isBusiness,
+            card: checkUser.toJSON()
+        });
+});
+app.get('/edit',isAuth, (req,res)=>{
     const email = req.session.email;
    userModel.findOne({email:email}).then(user=>{
         if(!user){            
@@ -352,12 +401,12 @@ app.post('/addCard', (req,res)=>{
     try{
     card.save();
     req.session.viewTitle = "Add Successfull";
-    res.redirect('/Users/myCard');
+    res.redirect('/Users/cardManage');
     }catch(error)
     {
         res.status(500).send(error);
         req.session.error = "Add fail";
-        res.redirect('/Users/myCard');
+        res.redirect('/Users/cardManage');
     }
 });
 app.get("/logout",(req,res)=>{

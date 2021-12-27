@@ -29,12 +29,25 @@
                 </div>
                 <div class="navbar align-self-center d-flex">
                     <a class="nav-link" href="#"><i class='bx bx-bell bx-sm bx-tada-hover text-primary'></i></a>
+                     <div class="dropdown">
                     <a class="nav-link" href="#"><i class='bx bx-cog bx-sm text-primary'></i></a>
-                    
+                    <div class="dropdown-content">
+                        {{#if query }}                        
+                    <a href="/Products/listBill">Manage Transaction</a>
+                    {{/if}}
+                    {{#if admin}}
+                    <a href="/Users/list">Manage Account</a>
+                        <a href="/Users/cardManage">Mange Card</a>
+                        {{/if}}
+                    {{#if business}}
+                     <a href="/Users/manageProduct">Manage Product</a>
+                     {{/if}}
+                    </div>
+                     </div>
                      <div class="dropdown">
 <a class="nav-link" style="color:#4232c2;" href="#"><i class='bx bx-user-circle bx-sm text-primary'></i>
   {{#if query }}
-  <b>{{query}}</b>
+  <b>My Account</b>
   {{else}}
  <b>Account</b>
  {{/if}}
@@ -42,6 +55,10 @@
   <div class="dropdown-content">
       {{#if query }}
    <a href="/Users/myProfile">My Profile</a>
+   {{#if admin}}
+   {{else}}
+    <a href="/Users/myCard">My Card</a>
+    {{/if}}
   <a href="/Users/logout">Log Out</a>
   {{else}} 
    <a href="/Users">Log In</a>
