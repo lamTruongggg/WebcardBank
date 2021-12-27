@@ -30,6 +30,9 @@ const UserSchema =  new mongoose.Schema({
     },
     dateUpdate:{
         type:Date
+    },
+    isAdmin:{
+        type:Number
     }
     
 

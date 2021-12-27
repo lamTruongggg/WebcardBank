@@ -6,6 +6,7 @@
      <a  onclick="test()" style="background-color:#4cc9f0; border-color:white;" class="btn btn-primary btn-sm">UNACTIVE</a>    &nbsp;&nbsp;&nbsp;&nbsp; 
       <a onclick="testt()" style="background-color:#4361ee; border-color:white;" class="btn btn-primary btn-sm">ACTIVING</a>    &nbsp;&nbsp;&nbsp;&nbsp; 
        <a onclick="testtt()"   class="btn btn-primary btn-sm">ACTIVE</a>    &nbsp;&nbsp;&nbsp;&nbsp; 
+         <a onclick="testttt()"   class="btn btn-primary btn-sm">LOCK</a>    &nbsp;&nbsp;&nbsp;&nbsp; 
     </div>
     <div id = "unactive">
 <table class="styled-table">
@@ -34,7 +35,7 @@
     <td>{{this.cvv}}</td>
     <td>{{this.type}}</td>
         <td style="display:flex; align-content:center; justify-content:space-around;">
-    <a href="/Users/delete/{{this.customerId}}" onclick="return comfirm('Are you sure ?')" class="btn btn-primary btn-sm">DELETE</a>
+    <a href="/Users/delete/{{this.customerId}}"onclick="return ConfirmDelete()" class="btn btn-primary btn-sm">DELETE</a>
     </td>
 </tr>
 {{/each}}
@@ -70,7 +71,7 @@
         <td>{{this.type}}</td>
         <td style="display:flex; align-content:center; justify-content:space-around;"><a href="/Users/edit/{{this.customerId}}?type={{this.cardType}}&country={{this.country}}" class="btn btn-primary btn-sm">EDIT</a>
      &nbsp;&nbsp;&nbsp;&nbsp; 
-    <a href="/Users/delete/{{this.customerId}}" onclick="return comfirm('Are you sure ?')" class="btn btn-primary btn-sm">DELETE</a>
+    <a href="/Users/delete/{{this.customerId}}"onclick="return ConfirmDelete()" class="btn btn-primary btn-sm">DELETE</a>
     </td>
 </tr>
 {{/each}}
@@ -106,7 +107,46 @@
         <td>{{this.type}}</td>
     <td style="display:flex; align-content:center; justify-content:space-around;"><a href="/Users/edit/{{this.customerId}}?type={{this.cardType}}&country={{this.country}}" class="btn btn-primary btn-sm">EDIT</a>
      &nbsp;&nbsp;&nbsp;&nbsp; 
-    <a href="/Users/delete/{{this.customerId}}" onclick="return comfirm('Are you sure ?')" class="btn btn-primary btn-sm">DELETE</a>
+    <a href="/Users/delete/{{this.customerId}}" onclick="return ConfirmDelete()" class="btn btn-primary btn-sm">DELETE</a>
+      &nbsp;&nbsp;&nbsp;&nbsp; 
+    <a href="/Users/lock/{{this.customerId}}" onclick="return ConfirmLock()" style="width: 20px;" class="btn btn-primary btn-sm">LOCK</a>
+    </td>
+</tr>
+{{/each}}
+</tbody>
+</table>
+
+</div>
+ <div id = "lock" style="display:none;">
+<table class="styled-table" >
+<thead>
+<tr>
+     <th>ID CUSTOMER</th>
+    <th>TYPE CARD</th>
+    <th>COUNTRY</th>
+      <th>CARD NUMBER</th>
+    <th>MONTH</th>
+    <th>YEAR</th>
+    <th>CVV</th>    
+     <th>TYPE ACCOUNT</th>    
+    <th>ACTION</th>
+</tr>
+</thead>
+<tbody>
+{{#each lock}}
+<tr >
+    <td >{{this.customerId}}</td>
+    <td>{{this.cardType}}</td>
+    <td class="pass">{{this.country}}</td>
+      <td>{{this.cardNumber}}</td>
+    <td class="pass">{{this.month}}</td>
+    <td>{{this.year}}</td>
+    <td>{{this.cvv}}</td>
+        <td>{{this.type}}</td>
+    <td style="display:flex; align-content:center; justify-content:space-around;"><a href="/Users/unLock/{{this.customerId}}" class="btn btn-primary btn-sm">UNLOCK</a>
+     &nbsp;&nbsp;&nbsp;&nbsp; 
+    <a href="/Users/delete/{{this.customerId}}"onclick="return ConfirmDelete()" class="btn btn-primary btn-sm">DELETE</a>
+   
     </td>
 </tr>
 {{/each}}
@@ -115,22 +155,49 @@
 
 </div>
 <script>
+  function ConfirmDelete()
+            {
+              var x = confirm("Are you sure you want to delete?");
+              if (x)
+                  return true;
+              else
+                return false;
+            }
+            function ConfirmLock()
+            {
+              var x = confirm("Are you sure you want to lock?");
+              if (x)
+                  return true;
+              else
+                return false;
+            }
 function test() {    
   document.getElementById("unactive").style.display="" ;
    document.getElementById("activing").style.display="none" ;
     document.getElementById("active").style.display="none" ;
+      document.getElementById("lock").style.display="none" ;
      document.getElementById("text").innerText= "VIEW LIST OF INFOR USER UNACTIVE";
 };
 function testt() {    
   document.getElementById("unactive").style.display="none" ;
    document.getElementById("activing").style.display="" ;
     document.getElementById("active").style.display="none" ;
+            document.getElementById("lock").style.display="none" ;
       document.getElementById("text").innerText= "VIEW LIST OF INFOR USER ACTIVING";
 };
 function testtt() {    
   document.getElementById("unactive").style.display="none" ;
    document.getElementById("activing").style.display="none" ;
     document.getElementById("active").style.display="" ;
+          document.getElementById("lock").style.display="none" ;
       document.getElementById("text").innerText= "VIEW LIST OF INFOR USER ACTIVE";
+};
+function testttt() {    
+  document.getElementById("unactive").style.display="none" ;
+    document.getElementById("activing").style.display="none" ;
+    document.getElementById("active").style.display="none" ;
+    document.getElementById("lock").style.display="" ;
+
+      document.getElementById("text").innerText= "VIEW LIST OF INFOR USER LOCK";
 };
 </script>

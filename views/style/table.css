@@ -2,11 +2,11 @@
 .btnn{
     border-radius: 5px;
     font-size: 0.9em;
-    width:80px;
+    width:60px;
     font-family: sans-serif;
     box-shadow: 0 0 20px #00000026;
-    padding: 12px;
-    margin-left: 20px;
+    padding: 6px;
+    margin-left: 6px;
     color:#ffffff;
     background-color: #4232c2;
     display:flex;

@@ -1,0 +1,81 @@
+<link rel="stylesheet" href="../style/cart.css" />
+<div class="body" style="margin-top: 60px; margin-bottom:30px;">
+<div class="card" style="margin-top: 12%; margin-bottom:12%;">
+    <div class="row">
+        <div class="col-md-8 cart">
+            <div class="title">
+                <div class="row">
+                    <div class="col">
+                        <h4><b style="color: #242333;">Shopping Cart</b></h4>
+                    </div>
+                    <div class="col align-self-center text-right text-muted"><p style="color: #242333;">{{numbers}} items </p></div>
+                </div>
+            </div>
+            {{#each carts}}
+            <form method="post" action="/Products/delete" >
+            <div class="row border-top border-bottom">
+                <input value="{{this._id}}" name="id" type="hidden"> 
+                <div class="row main align-items-center">
+                    <div class="col-2"><img class="img-fluid" src="https://viblo.asia/favicon-128.png"></div>
+                    <div class="col">
+                        <div class="row text-muted"><b style="color: #242333;">{{this.name}}</b></div>
+                    </div>
+                    <div class="col"> <a href="#">-</a><a href="#" class="border">{{this.quantity}}</a><a href="#">+</a> </div>
+                   <input  value="{{this.price}}" name="price" type="hidden"> 
+                    <div class="col"> {{this.price}} {{this.currency}} <span class="close"> <button onclick="return ConfirmDelete()"  style="width: 60px; height:50px;  background-color:#242333; color:white; margin-left:20px;margin-bottom:12px; border-radius: 5px;" >X</button></span></div>
+                </div>
+            </div>
+            </form>
+            {{/each}}
+            <div class="back-to-shop"><a href="/">&leftarrow;</a><span class="text-muted" ><p style="color: #242333;">Back to shop</p></span></div>
+        </div>
+        <div class="col-md-4 summary" style="margin-top:6%;">
+            <div>
+                <h5><b>Summary</b></h5> 
+            </div>
+            <hr>
+            <div class="row">
+
+                <button style="width: 120px; height:50px;  background-color:#242333; color:white;margin-bottom:12px; border-radius: 5px;"  onclick="findTotal()">RESET</button>
+                <div class="col" style="padding-left:10px;"> {{numbers}} ITEMS</div>
+                <div class="col text-right "> </div>
+            </div>
+             <form>         
+                <p>GIVE CODE</p> <input id="code" placeholder="Enter your code">
+            </form>
+            <div class="row" style="border-top: 1px solid rgba(0,0,0,.1); padding: 2vh 0;">
+                <div class="col">TOTAL PRICE</div>
+                <div class="col text-right" style="display: flex;">&dollar; <h3 name="total" id="total"></h3></div>              
+            </div> 
+            <form method="post" action="/Products/pay">
+              <input  name="totalMoney" id="totalMoney" type="hidden" />
+            <input type="submit" value="CHECKOUT" onclick="findTotal()" class="btnn">
+            </form>
+        </div>
+    </div>
+</div>
+</div>
+
+    <script type="text/javascript">
+   
+    function ConfirmDelete()
+            {
+              var x = confirm("Are you sure you want to delete?");
+              if (x)
+                  return true;
+              else
+                return false;
+            }
+    window.addEventListener('load', 
+function findTotal(){
+    var arr = document.getElementsByName('price');
+    var tot=0;
+    for(var i=0;i<arr.length;i++){
+        if(parseInt(arr[i].value))
+            tot += parseInt(arr[i].value);
+    }
+    document.getElementById('totalMoney').value = tot;
+     document.getElementById('total').innerHTML = tot;
+}, false);
+
+    </script>

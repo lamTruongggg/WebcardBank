@@ -23,9 +23,15 @@ app.get('/about',(req,res)=>{
 app.get('/pricing',async(req,res)=>{
       const email = req.session.email;  
       const products = await productModel.find({});
+      const titles = req.session.status;
+      const error = req.session.error;
+      delete req.session.error;
+      delete req.session.status;
      res.render('partials/pricing.hbs',{
          query:email,
-         products: products.map(products => products.toJSON())
+         products: products.map(products => products.toJSON()),
+         titles:titles,
+         error:error
     });
 });
 app.get('/work',(req,res)=>{

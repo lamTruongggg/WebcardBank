@@ -73,11 +73,13 @@ app.get('/list',async(req,res)=>{
     const unactive = await cardCustomerModel.find({status:0});
     const activing = await cardCustomerModel.find({status:1});
     const active = await cardCustomerModel.find({status:2});
+     const lock = await cardCustomerModel.find({status:3});
     console.log(active);
     res.render('users/view-user.hbs',{
         unactive: unactive.map(unactive => unactive.toJSON()),
          activing: activing.map(activing => activing.toJSON()),
-          active: active.map(active => active.toJSON())
+          active: active.map(active => active.toJSON()),
+              lock: lock.map(lock => lock.toJSON())
     });
 });
 function addRecord(req,res)
@@ -93,6 +95,7 @@ function addRecord(req,res)
         else{        
             const hashedPws = bcrypt.hashSync(users.password,12);
            users.password= hashedPws;
+           users.isAdmin = 0;
            cardNumberModel.findOneAndUpdate({country:body.country,cardType:body.cardType,status:0,type:body.typeAccount},{ $set: { "status": 1}},{new:true},(err,number)=>{
                if(!number){
                   res.render('users/addOrEdit.hbs',{
@@ -248,7 +251,32 @@ app.get('/delete/:id', async(req,res)=>{
         res.status(500).send(error);
     }
 });
-
+app.get('/lock/:id', async(req,res)=>{
+    try{
+        
+         const changeLock = await cardCustomerModel.findOneAndUpdate({customerId:req.params.id},{$set:{"status":3}});
+          if(!changeLock) res.status(404).send("No item found");
+        res.redirect('/Users/list');
+        //res.status(200).send();
+    }
+    catch(error)
+    {
+        res.status(500).send(error);
+    }
+});
+app.get('/unLock/:id', async(req,res)=>{
+    try{
+        
+         const changeLock = await cardCustomerModel.findOneAndUpdate({customerId:req.params.id},{$set:{"status":2}});
+          if(!changeLock) res.status(404).send("No item found");
+        res.redirect('/Users/list');
+        //res.status(200).send();
+    }
+    catch(error)
+    {
+        res.status(500).send(error);
+    }
+});
 app.get('/', async(req,res)=>{      
      res.render('partials/login.hbs');
 });
@@ -261,14 +289,15 @@ app.post('/login', async(req,res)=>{
     const activities = new activitiesModel({user:body.email,login:date});
     userModel.findOne({email:users.email, status:2}).then(user=>{
         if(!user){            
-        return res.render('/Users',{view: "validate Email or Pasword"});
+        return res.render('partials/login.hbs',{mess: "validate Email or Pasword"});
     }
     const pass = user.password;
     const validPassword =  bcrypt.compareSync(body.password,pass);
       if (!validPassword) {
-        return res.render('/Users',{view: "validate Email or Pasword"});
+        return res.render('partials/login.hbs',{mess: "validate Email or Pasword"});
       }      
       req.session.isAuth =true;
+      req.session.isAdmin = true;
       req.session.email = user.email;
       activities.save();
       res.redirect('/')
@@ -278,7 +307,7 @@ app.get('/myProfile', async(req,res)=>{
        const email = req.session.email;
     userModel.findOne({email:email}).then(user=>{
         if(!user){            
-         return res.redirect('Users/logout');
+         return res.redirect('/Users/logout');
     }
         return res.render('partials/about.hbs',{
             users:user.toJSON(),

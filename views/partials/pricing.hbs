@@ -75,16 +75,12 @@
         </div>
     </div>
     <!-- End Content -->
-
-
-
-
-
     <!-- Start Pricing Horizontal Section -->
     <section class="bg-light pt-sm-0 py-5">
         <div class="container py-5">
 
-            <h1 class="h2 semi-bold-600 text-center mt-2">Our Pricing</h1>
+            <h1 class="h2 semi-bold-600 text-center mt-2">Our Pricing</h1> 
+            <center><h3 style="color:lawngreen;">{{titles}}</h3></center>
             <p class="text-center pb-5 light-300">Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut facilisis.</p>
 
            {{#each products}}
@@ -99,7 +95,7 @@
                 <div class="pricing-horizontal-tag col-md-4 text-center pt-3 d-flex align-items-center">
                     <div class="w-100 light-300">
                         <p>{{this.price}} {{this.currency}}</p>
-                        <a href="#" class="btn rounded-pill px-4 btn-outline-primary mb-3">Get Now</a>
+                        <a href="/Products/addCart/{{this._id}}" class="btn rounded-pill px-4 btn-outline-primary mb-3">Get Now</a>
                     </div>
                 </div>
             </div>

@@ -1,0 +1,114 @@
+<link rel="stylesheet" href="../style/table.css" />
+<div align="center" style="margin-top: 120px; margin-bottom:120px;">
+    <h1>Payment Done. Thank you for purchasing our products</h1>
+    <br/>
+    <h2>Receipt Details:</h2>
+   <table>
+        <tr><td><br/></td></tr>
+        <tr>
+            <td colspan="2"><b>Payer Information:</b></td>
+        </tr>
+        <tr>
+            <td>First Name:</td>
+            <td>{{fname}}</td>
+        </tr>
+        <tr>
+            <td>Last Name:</td>
+            <td>{{lname}}</td>
+        </tr>
+        <tr>
+            <td>Email:</td>
+            <td>{{email}}</td>
+        </tr>
+        <tr><td><br/></td></tr>
+        <tr>
+            <td colspan="2"><b>Payee Information:</b></td>
+        </tr>
+        <tr>
+            <td>Email:</td>
+            <td>{{seller}}</td>
+        </tr>
+        <tr><td><br/></td></tr>
+        <tr>
+            <td colspan="2"><b>Shipping Address:</b></td>
+        </tr>
+        <tr>
+            <td>Recipient Name:</td>
+            <td>{{recipient_name}}</td>
+        </tr>
+        <tr>
+            <td>Line 1:</td>
+            <td>{{line1}}</td>
+        </tr>
+        <tr>
+            <td>City:</td>
+            <td>{{city}}</td>
+        </tr>
+        <tr>
+            <td>State:</td>
+            <td>{{state}}</td>
+        </tr>
+        <tr>
+            <td>Country Code:</td>
+            <td>{{country_code}}</td>
+        </tr>
+        <tr>
+            <td>Postal Code:</td>
+            <td>{{postal_code}}</td>
+        </tr>
+        <tr><td><br/></td></tr>
+        <tr>
+            <td colspan="2"><b>Items Information:</b></td>
+        </tr>
+        <tr>
+            <td>Name:</td>
+            <td>{{name_items}}</td>
+        </tr>
+        <tr>
+            <td>Sku:</td>
+            <td>{{sku_items}}</td>
+        </tr>
+        <tr>
+            <td>Price:</td>
+            <td>{{price_items}}</td>
+        </tr>
+        <tr>
+            <td>Currency:</td>
+            <td>{{currency_items}}</td>
+        </tr>
+        <tr>
+            <td>Quantity:</td>
+            <td>{{quantity_items}}</td>
+        </tr>
+        <tr><td><br/></td></tr>
+        <tr>
+            <td colspan="2"><b>The Information:</b></td>
+        </tr>
+        <tr>
+            <td>Total:</td>
+            <td>{{total}}</td>
+        </tr>
+        <tr>
+            <td>Fee Paypal:</td>
+            <td>{{fee_payment}}</td>
+        </tr>
+         <tr>
+            <td>The Total:</td>
+            <td>{{subTotal}}</td>
+        </tr>
+        <tr>
+            <td>Time Create:</td>
+            <td>{{dateCreate}}</td>
+        </tr>
+        <tr>
+            <td>Time Update:</td>
+            <td>{{dateUpdate}}</td>
+        </tr>
+        <br>
+        <tr>
+            <td colspan="2" align="center">
+                <input type="submit" style="width: 60%; height:30px; margin-top:20px;" class="btnn" value="Pay Now" />
+            </td>
+        </tr>    
+    </table>
+</div>
