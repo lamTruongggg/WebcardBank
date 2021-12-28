@@ -133,16 +133,16 @@ function addRecord(req,res)
 }
 var total =0;
 
-app.get('/',async(req,res)=>{
+app.get('/',isAuth,async(req,res)=>{
     
 });
-app.get('/cancel', function(req, res){
+app.get('/cancel',isAuth, function(req, res){
    res.render('partials/note.hbs',{
        text:"Payment Cancel. PLEASE CHECK YOUR CART AGAIN",
        query:req.session.email,admin:req.session.isAdmin,business:req.session.isBusiness
    });
 });
-app.post('/delete',async(req,res)=>{
+app.post('/delete',isAuth,async(req,res)=>{
   console.log(req.body);
   
     const cartCustomer = await cartModel.findOneAndDelete({_id:req.body.id});
@@ -204,7 +204,7 @@ connectModel.findOne({customerId:(user._id).toString()}).then(connect=>{
 });
  });
 });
-app.get('/review_payment', (req, res) => {
+app.get('/review_payment',isAuth, (req, res) => {
   const payerId = req.query.PayerID;
   const paymentId = req.query.paymentId;
   paypal.payment.get(paymentId, function (error, payment) {
@@ -239,14 +239,12 @@ app.get('/review_payment', (req, res) => {
 });
 });
 
-app.post('/checkBill', async(req, res) => {
-     console.log(req.body);
+app.post('/checkBill',isAuth, async(req, res) => {
   const payerId = req.body.PayerID;
   const paymentId = req.body.paymentId;
-  const user = await userModel.findOne({email:req.session.email});
-  const checkUser = await cardCustomerModel.findOne({customerId:(user._id).toString(),status:2});
-    if(checkUser)
-    {
+  userModel.findOne({email:req.session.email}).then(user=>{  
+  cardCustomerModel.findOne({customerId:(user._id).toString(),status:2}).then(checkUser=>{  
+    if(checkUser)    {
         var checkMoney = checkUser.moneyBank - total;
      if(checkMoney >=0)   
      {
@@ -291,8 +289,10 @@ app.post('/checkBill', async(req, res) => {
        text:"Payment Cancel - YOUR Account is locked. PLEASE CHECK YOUR CART AGAIN",
         query:req.session.email,admin:req.session.isAdmin,business:req.session.isBusiness
    });}
+   });
+   });
 });
-app.get('/verifyAccount/:id',async(req,res)=>{
+app.get('/verifyAccount/:id',isAuth,async(req,res)=>{
     try{
         const payerId = req.query.PayerID;
   const paymentId = req.query.paymentId;
@@ -315,7 +315,7 @@ app.get('/verifyAccount/:id',async(req,res)=>{
     }
 });
 
-app.get('/listBill', async(req, res) => {
+app.get('/listBill',isAuth, async(req, res) => {
     const user = await userModel.findOne({email:req.session.email,admin:req.session.isAdmin,business:req.session.isBusiness});
     if(user.isAdmin == 1)
     {
@@ -347,7 +347,7 @@ app.get('/listBill', async(req, res) => {
 }
 
 });
-app.get('/detail/:id',async(req,res)=>{
+app.get('/detail/:id',isAuth,async(req,res)=>{
     const bill = await billModel.findById(req.params.id);
     res.render('partials/success.hbs',{
          query:req.session.email,admin:req.session.isAdmin,business:req.session.isBusiness,
@@ -375,7 +375,7 @@ app.get('/detail/:id',async(req,res)=>{
              text: "Payment Infomation"
         });
 });
-app.get('/success', async(req, res) => {
+app.get('/success',isAuth, async(req, res) => {
     console.log(req.body);
   const payerId = req.query.PayerID;
   const paymentId = req.query.paymentId;
