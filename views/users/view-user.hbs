@@ -89,7 +89,7 @@
     <td>{{this.year}}</td>
     <td>{{this.cvv}}</td>
         <td>{{this.type}}</td>
-        <td style="display:flex; align-content:center; justify-content:space-around;"><a href="/Users/edit/{{this.customerId}}?type={{this.cardType}}&country={{this.country}}" class="btn btn-primary btn-sm">EDIT</a>
+        <td style="display:flex; align-content:center; justify-content:space-around;"><a href="/Users/edit/{{this.customerId}}?type={{this.cardType}}&country={{this.country}}&types={{this.type}}" class="btn btn-primary btn-sm">EDIT</a>
      &nbsp;&nbsp;&nbsp;&nbsp; 
     <a href="/Users/delete/{{this.customerId}}"onclick="return ConfirmDelete()" class="btn btn-primary btn-sm">DELETE</a>
     </td>
@@ -125,8 +125,7 @@
     <td>{{this.year}}</td>
     <td>{{this.cvv}}</td>
         <td>{{this.type}}</td>
-    <td style="display:flex; align-content:center; justify-content:space-around;"><a href="/Users/edit/{{this.customerId}}?type={{this.cardType}}&country={{this.country}}" class="btn btn-primary btn-sm">EDIT</a>
-     &nbsp;&nbsp;&nbsp;&nbsp; 
+    <td style="display:flex; align-content:center; justify-content:space-around;">
     <a href="/Users/delete/{{this.customerId}}" onclick="return ConfirmDelete()" class="btn btn-primary btn-sm">DELETE</a>
       &nbsp;&nbsp;&nbsp;&nbsp; 
     <a href="/Users/lock/{{this.customerId}}" onclick="return ConfirmLock()" style="width: 20px;" class="btn btn-primary btn-sm">LOCK</a>

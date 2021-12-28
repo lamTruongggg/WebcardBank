@@ -124,9 +124,13 @@
                                 <div class="input-group">
                                     <div class="rs-select2 js-select-simple select--no-search">
                                         <select name="typeAccount">
+                                            {{#if business}}
+                                               <option disabled="disabled"  selected="selected">{{business}} </option> 
+                                            {{else}}
                                                <option disabled="disabled"  selected="selected">Choose Type Account </option> 
                                             <option>Personal</option>
                                              <option>Business</option>
+                                             {{/if}}
                                         </select>
                                         <div class="select-dropdown"></div>
                                     </div>
@@ -139,6 +143,24 @@
                             <div class="value">
                                 <div class="input-group">
                                     <input class="input--style-5" type="password" name="cardpass" required>
+                                </div>
+                            </div>
+                        </div> 
+                        {{/if}}
+                        {{#if business}}
+                        <div class="form-row">
+                            <div class="name">Client Id</div>
+                            <div class="value">
+                                <div class="input-group">
+                                    <input class="input--style-5" type="password" name="client_id" required>
+                                </div>
+                            </div>
+                        </div> 
+                        <div class="form-row">
+                            <div class="name">Client Secret</div>
+                            <div class="value">
+                                <div class="input-group">
+                                    <input class="input--style-5" type="password" name="client_secret" required>
                                 </div>
                             </div>
                         </div> 

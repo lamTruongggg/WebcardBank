@@ -9,6 +9,7 @@ const cardNumberModel = require('../models/cardNumber');
 const cardCustomerModel = require('../models/cardCustomer');
 const activitiesModel = require('../models/activity');
 const productModel = require('../models/product');
+const connectModel = require('../models/connect');
 const currencyModel = require('../models/currency');
 const nodemailer = require("nodemailer");
 const fs = require('fs');
@@ -52,7 +53,7 @@ app.get('/Register',async(req,res)=>{
     res.render('users/addOrEdit.hbs',{
         countrys: country.map(country => country.toJSON()),
         cards: card.map(card => card.toJSON()),
-        titles: titles,
+        viewTitle: titles,
         query:req.session.email,admin:req.session.isAdmin,business:req.session.isBusiness
     }
     );
@@ -115,6 +116,7 @@ function addRecord(req,res)
            users.password= hashedPws;
            users.isAdmin = 0;
            cardNumberModel.findOneAndUpdate({country:body.country,cardType:body.cardType,status:0,type:body.typeAccount},{ $set: { "status": 1}},{new:true},(err,number)=>{
+               console.log(number);
                if(!number){
                   res.render('users/addOrEdit.hbs',{
         viewTitle:"Number Card is stock up !!!",
@@ -166,7 +168,7 @@ function addRecord(req,res)
                }
            })
     //res.send(u);
-        req.session.viewTitles =  "Insert User successfull";
+        req.session.viewTitles =  "Insert User successfull - PLEASE CHECK GMAIL";
         res.redirect('/Users/Register');
         }
     })
@@ -228,7 +230,12 @@ function updateRecord(req,res)
           cardNumberModel.findOneAndUpdate({cardNumber:changeActive.cardNumber},{$set:{"status":2}},{new:true},(err,activeNumber)=>{
           if(!activeNumber) res.status(404).send("No item found");
           });
-                });         
+                });       
+                const connect = new connectModel();
+                connect.customerId = req.body.id;
+                connect.client_id = req.body.client_id;
+                connect.client_secret = req.body.client_secret;
+                connect.save();
                  console.log("email sended");
             }
                 });
@@ -250,7 +257,7 @@ app.get('/edit/:id',isAuth,isAdmin, (req,res)=>{
                 type:req.query.type,
                 country:req.query.country,
                 static: 1,
-                query:req.session.email
+                query:req.session.email,admin:req.session.isAdmin,business:req.query.types
             });
         }
     });
@@ -309,6 +316,7 @@ app.post('/login',(req,res)=>{
     users.dateUpdate = date;
     const activities = new activitiesModel({user:body.email,login:date});
     userModel.findOne({email:users.email, status:2}).then(user=>{
+        console.log(user);
         if(!user){            
         return res.render('partials/login.hbs',{mess: "validate Email or Pasword",query:req.session.email});
     }

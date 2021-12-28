@@ -6,6 +6,7 @@ const userModel = require('../models/user');
 const paypal = require('paypal-rest-sdk');
 const billModel = require('../models/bill');
 const nodemailer = require("nodemailer");
+const connectModel = require('../models/connect');
 const fs=require('fs');
 const app = express();
 const isAuth = (req,res, next)=>{
@@ -163,10 +164,13 @@ app.post('/pay',isAuth,function(req,res){
 {
   total+=parseFloat(items[i].price)*items[i].quantity;
 }
+userModel.findOne({email:it.seller}).then(user=>{
+   
+connectModel.findOne({customerId:(user._id).toString()}).then(connect=>{   
   paypal.configure({
   'mode': 'sandbox', //sandbox or live
-  'client_id': 'AW1T5-R2qJvdLXBKK4qTYT4urvBIuvmunzyBNoG5Ud2pFEnjsmg8BnWqFHv9Q5jQ1JLflIck0FL0xkbW',
-  'client_secret': 'EDCd6la-rJTRrZnurKGdyGzfnZLgxnOT3Th4PePCTGVKE66-Ios9rsBS7cIXQNX-F99l21UNqi_xpkOP'
+  'client_id': connect.client_id,
+  'client_secret': connect.client_secret
 });
  const link="http://"+req.get('host')+"/Products";
     var create_payment_json = {
@@ -199,6 +203,8 @@ app.post('/pay',isAuth,function(req,res){
         }
       }
     }
+});
+});
 });
  });
 });
