@@ -115,6 +115,9 @@ function addRecord(req,res)
             const hashedPws = bcrypt.hashSync(users.password,12);
            users.password= hashedPws;
            users.isAdmin = 0;
+           const date = new Date();
+           users.dateCreate = date;
+           users.dateUpdate = date;
            cardNumberModel.findOneAndUpdate({country:body.country,cardType:body.cardType,status:0,type:body.typeAccount},{ $set: { "status": 1}},{new:true},(err,number)=>{
                console.log(number);
                if(!number){
