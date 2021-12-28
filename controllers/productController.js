@@ -159,11 +159,7 @@ app.post('/pay',isAuth,function(req,res){
     "currency":it.currency,
     "quantity": it.quantity
 }
-];
-        for(let i = 0;i<items.length;i++)
-{
-  total+=parseFloat(items[i].price)*items[i].quantity;
-}
+]; total = req.body.totalMoney;
 userModel.findOne({email:it.seller}).then(user=>{
    
 connectModel.findOne({customerId:(user._id).toString()}).then(connect=>{   
