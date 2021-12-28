@@ -243,6 +243,10 @@ app.post('/checkBill',isAuth, async(req, res) => {
   const payerId = req.body.PayerID;
   const paymentId = req.body.paymentId;
   userModel.findOne({email:req.session.email}).then(user=>{  
+       userModel.findOne({email:req.body.seller}).then(seller=>{  
+    cardCustomerModel.findOne({customerId:(seller._id).toString(),status:2}).then(checkSeller=>{  
+        if(checkSeller)
+        {
   cardCustomerModel.findOne({customerId:(user._id).toString(),status:2}).then(checkUser=>{  
     if(checkUser)    {
         var checkMoney = checkUser.moneyBank - total;
@@ -290,7 +294,16 @@ app.post('/checkBill',isAuth, async(req, res) => {
         query:req.session.email,admin:req.session.isAdmin,business:req.session.isBusiness
    });}
    });
+}
+else{
+    return res.render('partials/note.hbs',{
+       text:"Payment Cancel - Buyer Account is locked. PLEASE CHECK YOUR CART AGAIN",
+        query:req.session.email,admin:req.session.isAdmin,business:req.session.isBusiness
    });
+}
+    });
+   });
+});
 });
 app.get('/verifyAccount/:id',isAuth,async(req,res)=>{
     try{
