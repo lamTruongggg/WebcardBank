@@ -252,6 +252,8 @@ function updateRecord(req,res)
         });
 }
 app.get('/edit/:id',isAuth,isAdmin, (req,res)=>{
+    if(req.query.types=="Business")
+    {
     userModel.findById(req.params.id,(err,user)=>{
         if(!err){
             res.render('users/addOrEdit.hbs',{
@@ -263,7 +265,22 @@ app.get('/edit/:id',isAuth,isAdmin, (req,res)=>{
                 query:req.session.email,admin:req.session.isAdmin,business:req.query.types
             });
         }
-    });
+    });}
+    else
+    {
+     userModel.findById(req.params.id,(err,user)=>{
+        if(!err){
+            res.render('users/addOrEdit.hbs',{
+                user:user.toJSON(),
+                titles: "INFORMATION USER",
+                type:req.query.type,
+                country:req.query.country,
+                static: 1,
+                query:req.session.email,admin:req.session.isAdmin
+            });
+        }
+    });   
+    }
 });
 app.get('/delete/:id',isAuth,isAdmin,async(req,res)=>{
     try{
